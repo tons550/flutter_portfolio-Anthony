@@ -1,0 +1,205 @@
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Samar Explorer',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.teal,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal, Colors.tealAccent],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.teal,
+                  elevation: 10,
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ItemsPage(type: 'Foods')),
+                  );
+                },
+                child: const Text(
+                  'Foods',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.teal,
+                  elevation: 10,
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ItemsPage(type: 'Tourist Spots')),
+                  );
+                },
+                child: const Text(
+                  'Tourist Spots',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ItemsPage extends StatelessWidget {
+  final String type;
+  final List<Map<String, String>> items;
+
+  ItemsPage({super.key, required this.type})
+      : items = type == 'Foods'
+            ? [
+                {'name': 'Binagol', 'description': 'Sweet delicacy made from taro root.', 'address': 'Leyte, Samar'},
+                {'name': 'Moron', 'description': 'Chocolatey rice cake.', 'address': 'Tacloban, Samar'},
+                {'name': 'Tahong Chips', 'description': 'Crispy mussel chips.', 'address': 'Basey, Samar'},
+              ]
+            : [
+                {'name': 'Sohoton Cave', 'description': 'Beautiful cave system in Samar.', 'address': 'Basey, Samar'},
+                {'name': 'Calbiga Caves', 'description': 'One of the largest cave systems in Southeast Asia.', 'address': 'Calbiga, Samar'},
+                {'name': 'San Juanico Bridge', 'description': 'The longest bridge in the Philippines.', 'address': 'Between Samar and Leyte'},
+              ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '$type in Samar',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.teal,
+      ),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: ListTile(
+              leading: Icon(
+                type == 'Foods' ? Icons.fastfood : Icons.place,
+                color: Colors.teal,
+              ),
+              title: Text(
+                items[index]['name']!,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              subtitle: Text(
+                items[index]['description']!,
+                style: const TextStyle(color: Colors.black54),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                      name: items[index]['name']!,
+                      description: items[index]['description']!,
+                      address: items[index]['address']!,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class DetailPage extends StatelessWidget {
+  final String name;
+  final String description;
+  final String address;
+
+  const DetailPage({
+    super.key,
+    required this.name,
+    required this.description,
+    required this.address,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.teal,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              description,
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.location_on, color: Colors.teal),
+                const SizedBox(width: 10),
+                Text(
+                  address,
+                  style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
